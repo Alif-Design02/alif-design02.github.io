@@ -3,97 +3,92 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Alif Design02 | Twilio Test Project</title>
+  <title>Alif Design02 - Twilio Project</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f4f6f8;
       margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f4f4f4;
-      color: #333;
-      padding: 20px;
+      padding: 0;
     }
-
     .container {
-      max-width: 600px;
-      margin: auto;
+      max-width: 500px;
+      margin: 40px auto;
       background: white;
       padding: 30px;
       border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       text-align: center;
     }
-
-    img {
-      max-width: 150px;
+    .logo {
+      width: 120px;
       margin-bottom: 20px;
     }
-
     h1 {
-      color: #e22c2c;
-      margin-bottom: 20px;
-    }
-
-    p {
-      font-size: 16px;
-      line-height: 1.6;
-      margin-bottom: 20px;
-    }
-
-    ul {
-      list-style-type: disc;
-      text-align: left;
-      margin: 20px auto;
-      padding: 0 20px;
-      display: inline-block;
-    }
-
-    li {
+      color: #e60000;
+      font-size: 28px;
       margin-bottom: 10px;
     }
-
-    h2 {
+    p {
       color: #333;
-      margin-top: 30px;
-    }
-
-    .button {
-      display: inline-block;
-      padding: 12px 24px;
-      margin-top: 20px;
+      line-height: 1.6;
       font-size: 16px;
-      background-color: #e22c2c;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      text-decoration: none;
-      transition: background 0.3s ease;
     }
-
-    .button:hover {
-      background-color: #c72020;
+    h2 {
+      margin-top: 30px;
+      color: #333;
+      font-size: 22px;
+    }
+    ul {
+      list-style: disc;
+      padding-left: 20px;
+      text-align: left;
+      margin-top: 10px;
+    }
+    a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .contact-button {
+      display: inline-block;
+      background-color: #e60000;
+      color: white;
+      padding: 12px 25px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 16px;
+      transition: background 0.3s;
+    }
+    .contact-button:hover {
+      background-color: #cc0000;
     }
   </style>
 </head>
-
 <body>
-  <div class="container">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2c/Twilio-logo-red.svg" alt="Twilio Logo">
 
-    <h1>Alif Design02</h1>
+<div class="container">
+  <img src="https://www.vectorlogo.zone/logos/twilio/twilio-ar21.svg" alt="Twilio Logo" class="logo">
+  <h1>Alif Design02</h1>
+  <p>This project is built for testing Twilio's voice call and messaging services for personal learning and development. It is not used for any commercial or marketing purposes.</p>
 
-    <p>This project is built for testing Twilio's voice call and messaging services for personal learning and development. It is not used for any commercial or marketing purposes.</p>
+  <h2>Project Goals</h2>
+  <ul>
+    <li>Explore Twilio Programmable Voice API</li>
+    <li>Test outgoing/incoming calls</li>
+    <li>Practice integrating Twilio into web apps</li>
+  </ul>
 
-    <h2>Project Goals</h2>
-    <ul>
-      <li>Explore Twilio Programmable Voice API</li>
-      <li>Test outgoing/incoming calls</li>
-      <li>Practice integrating Twilio into web apps</li>
-    </ul>
+  <h2>Contact Information</h2>
+  <p>Email: <a href="mailto:Dontol17081945@gmail.com">Dontol17081945@gmail.com</a></p>
 
-    <h2>Contact Information</h2>
-    <p>Email: <a href="mailto:Dontol17081945@gmail.com">Dontol17081945@gmail.com</a></p>
+  <a href="mailto:Dontol17081945@gmail.com" class="contact-button">Contact Me</a>
+</div>
 
-    <a class="button" href="mailto:Dontol17081945@gmail.com">Contact Me</a>
-  </div>
 </body>
 </html>
