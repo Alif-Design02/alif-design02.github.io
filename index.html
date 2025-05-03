@@ -1,94 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Alif Design02 - Twilio Project</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>USDT Invoice Payment</title>
   <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
     body {
-      font-family: 'Roboto', sans-serif;
-      background-color: #f4f6f8;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      max-width: 500px;
-      margin: 40px auto;
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      text-align: center;
-    }
-    .logo {
-      width: 120px;
-      margin-bottom: 20px;
-    }
-    h1 {
-      color: #e60000;
-      font-size: 28px;
-      margin-bottom: 10px;
-    }
-    p {
-      color: #333;
-      line-height: 1.6;
-      font-size: 16px;
-    }
-    h2 {
-      margin-top: 30px;
-      color: #333;
-      font-size: 22px;
-    }
-    ul {
-      list-style: disc;
-      padding-left: 20px;
-      text-align: left;
-      margin-top: 10px;
-    }
-    a {
-      color: #0066cc;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-    .contact-button {
-      display: inline-block;
-      background-color: #e60000;
+      background: linear-gradient(135deg, #667eea, #764ba2);
       color: white;
-      padding: 12px 25px;
-      margin-top: 20px;
-      border: none;
-      border-radius: 8px;
-      text-decoration: none;
-      font-size: 16px;
-      transition: background 0.3s;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
     }
-    .contact-button:hover {
-      background-color: #cc0000;
+    h1 { margin-bottom: 1rem; text-align: center; }
+    #panel, #paySection {
+      background: rgba(255,255,255,0.1);
+      padding: 1rem;
+      border-radius: 12px;
+      max-width: 320px;
+      width: 100%;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      margin-top: 1rem;
+    }
+    input, button {
+      width: 100%;
+      padding: 0.8rem;
+      margin-top: 0.5rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: none;
+    }
+    input { background: rgba(255,255,255,0.2); color: white; }
+    button {
+      background: linear-gradient(45deg, #ff758c, #ff7eb3);
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    #linkContainer {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      word-break: break-word;
+      background: rgba(255,255,255,0.2);
+      padding: 0.5rem;
+      border-radius: 8px;
+    }
+    #message {
+      margin-top: 1rem;
+      text-align: center;
     }
   </style>
 </head>
 <body>
+  <h1>USDT Invoice</h1>
+  <div id="panel">
+    <label>Invoice Amount (USDT):</label>
+    <input type="number" id="amountInput" min="0.01" step="0.01" placeholder="e.g. 25.50" />
+    <button id="generateBtn">Generate Invoice Link</button>
+    <div id="linkContainer" style="display:none;"></div>
+  </div>
 
-<div class="container">
-  <img src="https://www.vectorlogo.zone/logos/twilio/twilio-ar21.svg" alt="Twilio Logo" class="logo">
-  <h1>Alif Design02</h1>
-  <p>This project is built for testing Twilio's voice call and messaging services for personal learning and development. It is not used for any commercial or marketing purposes.</p>
+  <div id="paySection" style="display:none;">
+    <p>Pay Invoice: <span id="payAmount"></span> USDT</p>
+    <button id="payBtn">Pay with MetaMask</button>
+    <div id="message"></div>
+  </div>
 
-  <h2>Project Goals</h2>
-  <ul>
-    <li>Explore Twilio Programmable Voice API</li>
-    <li>Test outgoing/incoming calls</li>
-    <li>Practice integrating Twilio into web apps</li>
-  </ul>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.6.2/dist/ethers.min.js"></script>
+  <script>
+    const tokenAddress = "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9"; // USDT Arbitrum
+    const recipient = "0x5ee2fbfed0bd46c5c4c4aba197b15d717547";
+    const tokenABI = [ "function transfer(address to, uint amount) public returns (bool)" ];
 
-  <h2>Contact Information</h2>
-  <p>Email: <a href="mailto:Dontol17081945@gmail.com">Dontol17081945@gmail.com</a></p>
+    const amountInput = document.getElementById('amountInput');
+    const generateBtn = document.getElementById('generateBtn');
+    const linkContainer = document.getElementById('linkContainer');
+    const paySection = document.getElementById('paySection');
+    const payAmountSpan = document.getElementById('payAmount');
+    const payBtn = document.getElementById('payBtn');
+    const message = document.getElementById('message');
 
-  <a href="mailto:Dontol17081945@gmail.com" class="contact-button">Contact Me</a>
-</div>
+    function getAmountFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      const amt = params.get('amount');
+      return amt && !isNaN(amt) && Number(amt) > 0 ? Number(amt) : null;
+    }
 
+    generateBtn.onclick = () => {
+      const val = parseFloat(amountInput.value);
+      if (!val || val <= 0) return alert("Enter valid amount.");
+      const url = `${window.location.origin}${window.location.pathname}?amount=${val}`;
+      linkContainer.textContent = url;
+      linkContainer.style.display = 'block';
+    };
+
+    async function sendPayment(amount) {
+      if (!window.ethereum) return message.textContent = "MetaMask not detected.";
+      try {
+        message.textContent = "Connecting wallet...";
+        await ethereum.request({ method: "eth_requestAccounts" });
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
+        const contract = new ethers.Contract(tokenAddress, tokenABI, signer);
+        const amountInUnits = ethers.parseUnits(amount.toString(), 6); // USDT uses 6 decimals
+        const tx = await contract.transfer(recipient, amountInUnits);
+        message.textContent = "Waiting for confirmation...";
+        await tx.wait();
+        message.textContent = "Payment successful!";
+      } catch (err) {
+        console.error(err);
+        message.textContent = "Error: " + (err.message || err);
+      }
+    }
+
+    payBtn.onclick = () => {
+      const amt = getAmountFromURL();
+      if (!amt) return message.textContent = "Invalid amount.";
+      sendPayment(amt);
+    };
+
+    window.onload = () => {
+      const amt = getAmountFromURL();
+      if (amt) {
+        payAmountSpan.textContent = amt;
+        paySection.style.display = 'block';
+        amountInput.disabled = true;
+        generateBtn.disabled = true;
+      }
+    };
+  </script>
 </body>
 </html>
